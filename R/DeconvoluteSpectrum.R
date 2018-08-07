@@ -36,8 +36,6 @@
 #'@importFrom stats median
 #'@importFrom stats cor
 #'@importFrom stats sd
-#'@importFrom utils txtProgressBar
-#'@importFrom utils setTxtProgressBar
 #'
 
 DeconvoluteSpectrum <- function(dat=NULL, rt=NULL, rt_dev=3, mz1=NULL, mz_dev=0.003, use.mz.adjust=FALSE, ionization=c("APCI","ESI")[1], smooth=0) {
@@ -52,8 +50,11 @@ DeconvoluteSpectrum <- function(dat=NULL, rt=NULL, rt_dev=3, mz1=NULL, mz_dev=0.
   }
   if(ionization=="ESI") {
     rt_dev_max <- 6
-    rt_dev_min <- 1
-    allowed_d_rt <- 0.35
+    # rt_dev_min <- 1
+    # allowed_d_rt <- 0.35
+    # min_cor_rat <- 0.7
+    rt_dev_min <- 2
+    allowed_d_rt <- 0.5
     min_cor_rat <- 0.7
     nmax <- 1000
   }
@@ -184,17 +185,22 @@ DeconvoluteSpectrum <- function(dat=NULL, rt=NULL, rt_dev=3, mz1=NULL, mz_dev=0.
     attr(out[[i]],"rt")[apply(out[[i]],2,which.max)] - attr(out[[i]],"rt")[which.max(out[[i]][,idx_mz1])]
   }),1,median),2)
 
-  # get stable ratios and correlation between mz1 and all mz2's
-  cor_rat <- round(apply(sapply(1:length(out), function(i) {
-    flt <- rank(-out[[i]][,idx_mz1])<=10 & out[[i]][,idx_mz1]>0
-    if (sum(flt)>=6) {
-      suppressWarnings(
-        cor(out[[i]][flt,,drop=F], out[[i]][flt,idx_mz1], use="p")
-      )
-    } else {
-      matrix(0, nrow=ncol(out[[i]]), ncol=1)
-    }
-  }),1,median,na.rm=T),2)
+  # get stable ratios and correlation between mz1 and all mz2's if more than 5 samples (as correlation is flawed otherwise)
+  if (length(out)>=5) {
+    cor_rat <- round(apply(sapply(1:length(out), function(i) {
+      flt <- rank(-out[[i]][,idx_mz1])<=10 & out[[i]][,idx_mz1]>0
+      if (sum(flt)>=6) {
+        suppressWarnings(
+          cor(out[[i]][flt,,drop=F], out[[i]][flt,idx_mz1], use="p")
+        )
+      } else {
+        matrix(0, nrow=ncol(out[[i]]), ncol=1)
+      }
+    }),1,median,na.rm=T),2)
+  } else {
+    # set cor_rat=1 artificially
+    cor_rat <- rep(1, length(d_rt))
+  }
 
   mz_rat <- round(apply(sapply(1:length(out), function(i) {
     flt <- rank(-out[[i]][,idx_mz1])<=10 & out[[i]][,idx_mz1]>0
@@ -214,10 +220,12 @@ DeconvoluteSpectrum <- function(dat=NULL, rt=NULL, rt_dev=3, mz1=NULL, mz_dev=0.
   if (any(flt, na.rm=T)) {
     spec <- matrix(c(mz2[which(flt)],mn_int[which(flt)]),ncol=2,dimnames=list(NULL,c("mz","int")))
     spec <- spec[is.finite(spec[,2]),,drop=FALSE]
+    spec <- spec[spec[,2]>0,,drop=FALSE]
   } else {
     spec <- matrix(NA, ncol=2, dimnames=list(NULL,c("mz","int")))[-1,]
   }
 
   attr(spec, "rt") <- rt
+  attr(spec, "warning") <- "Less than 5 samples provided, no correlation testing was performed."
   return(spec)
 }

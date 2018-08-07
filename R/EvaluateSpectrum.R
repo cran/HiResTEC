@@ -22,7 +22,7 @@ EvaluateSpectrum <- function(res=NULL, dat=NULL, drt=2, dmz=0.005, ionization=c(
 
   # deconvolute up to 10 spectra of early and late time point
   tp <- res[["tp"]]
-  #browser()
+
   use.decon <- which(tp==min(tp,na.rm=T))
     res[["s"]] <- try(DeconvoluteSpectrum(dat=dat[use.decon], rt=res[["rt"]], mz1 = res[["mz1"]], use.mz.adjust = FALSE, rt_dev=drt, mz_dev=dmz, ionization=ionization, smooth=smooth))
   use.decon <- which(tp==max(tp,na.rm=T))

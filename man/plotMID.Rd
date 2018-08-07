@@ -5,7 +5,7 @@
 \title{plotMID.}
 \usage{
 plotMID(mid = NULL, gr = NULL, name = "unknown", contr = NULL,
-  stackedbars = FALSE, ...)
+  stackedbars = FALSE, subplot_ylim = FALSE, ...)
 }
 \arguments{
 \item{mid}{Matrix of measured ion intensities corrected using CalcMID.}
@@ -17,6 +17,8 @@ plotMID(mid = NULL, gr = NULL, name = "unknown", contr = NULL,
 \item{contr}{Contrasts. Not yet clear if useful.}
 
 \item{stackedbars}{Alternative plotting layout using stacked bar plot.}
+
+\item{subplot_ylim}{Calculate ylim individually per subplot if TRUE.}
 
 \item{...}{Further arguments to 'boxplot'.}
 }

@@ -141,11 +141,13 @@ EvaluateCandidate <- function(x=NULL, tp=NULL, gr=NULL, dat=NULL, mz_iso=1.00335
     res[["err_msg"]] <- c(res[["err_msg"]], "unexpected mass drift")
   }
 
-  # compute mean cv ratios
-  mean_sd <- mean(sapply(split(ratios, res[["inter"]]), function(x) { ifelse(sum(is.finite(x))>=3, sd(x, na.rm=T), NA) }), na.rm=T)
-  mean_sd <- mean_sd/diff(range(ratios, na.rm=T))
-  if (!is.finite(mean_sd) || mean_sd>0.3) {
-    res[["err_msg"]] <- c(res[["err_msg"]], "mean_sd > 0.3 of total range")
+  # compute mean cv ratios (only if >=3 replicates per group are present)
+  if (any(table(res[["inter"]])>=3)) {
+    mean_sd <- mean(sapply(split(ratios, res[["inter"]]), function(x) { ifelse(sum(is.finite(x))>=3, sd(x, na.rm=T), NA) }), na.rm=T)
+    mean_sd <- mean_sd/diff(range(ratios, na.rm=T))
+    if (!is.finite(mean_sd) || mean_sd>0.3) {
+      res[["err_msg"]] <- c(res[["err_msg"]], "mean_sd > 0.3 of total range")
+    }
   }
 
   # compute a linear model for pseudo enrichments (==ratios)
