@@ -5,8 +5,8 @@
 \title{EvaluatePairsFromXCMSSet.}
 \usage{
 EvaluatePairsFromXCMSSet(xg = NULL, tp = NULL, gr = NULL, drt = 1,
-  dmz = 0.025, mz_iso = 1.00335, n = 6, method = c("APCI", "ESI")[1],
-  specific_row = NULL, testing = FALSE, silent = FALSE)
+  dmz = 0.025, mz_iso = 1.00335, n = 6, method = c("APCI",
+  "ESI")[1], specific_row = NULL, testing = FALSE, silent = FALSE)
 }
 \arguments{
 \item{xg}{xcmsSet object with group information.}
@@ -51,4 +51,5 @@ data(sam, package="HiResTEC")
 xcms_cand <- EvaluatePairsFromXCMSSet(xg=xg, tp=sam$TP, gr=sam$Group, drt=0.5, dmz=0.005)
 head(xcms_cand[order(xcms_cand$P),])
 }
+
 }

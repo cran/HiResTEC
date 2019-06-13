@@ -35,10 +35,11 @@ EvaluateMassTargetedForFlux <- function(xg=NULL, dat=NULL, tp=NULL, gr=NULL, mz=
   if (length(specific_row)>=1) {
     if (length(specific_row)>1) {
       print("Several M0 peaks were found for this mz/rt pair.")
-      print(cbind(xg@groups[specific_row,c("mzmed","rtmed","npeaks")], "medianInt"=apply(groupval(xg)[specific_row,],1,median,na.rm=T)))
+      gv <- groupval(xg=xg)
+      print(cbind(xg@groups[specific_row,c("mzmed","rtmed","npeaks")], "medianInt"=apply(gv[specific_row,],1,median,na.rm=T)))
       specific_row <- specific_row[which.min(abs(xg@groups[specific_row,"mzmed"]-mz))]
       print("Keep best mz.")
-      print(cbind(xg@groups[specific_row,c("mzmed","rtmed","npeaks"),drop=F], "medianInt"=apply(groupval(xg)[specific_row,,drop=FALSE],1,median,na.rm=T)))
+      print(cbind(xg@groups[specific_row,c("mzmed","rtmed","npeaks"),drop=F], "medianInt"=apply(gv[specific_row,,drop=FALSE],1,median,na.rm=T)))
     }
     out <- EvaluatePairsFromXCMSSet(xg=xg, tp=tp, gr=gr, drt=drt, dmz=dmz, mz_iso=mz_iso, n=ifelse(is.null(ng),6,ng), specific_row = specific_row)
     if (nrow(out)>=1) {

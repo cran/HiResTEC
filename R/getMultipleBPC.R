@@ -85,6 +85,7 @@ getMultipleBPC <- function(x, mz=NULL, mz_dev=0.005, rt=NULL, rt_dev=2, zeroVal=
   mzmat <- t(mzmat) - mz # [nmz x 5]
   mzmat <- round(1000*Biobase::rowMedians(mzmat, na.rm=TRUE)) # slightly faster, we need Biobase anyway due to xcms
   # mzmat <- round(1000*apply(mzmat, 1, median, na.rm=TRUE),1) # vector of length nmz
+  mzmat[!is.finite(mzmat)] <- NA
   if (length(mzmat)<length(mz)) mzmat <- rep(NA, length(mz))
   attr(res,"mass_defect") <- mzmat
   return(res)

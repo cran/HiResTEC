@@ -5,7 +5,7 @@
 \title{plotBPC.}
 \usage{
 plotBPC(bpc = NULL, mfrow = NULL, skip_plots = NULL, ylim = NULL,
-  col = NULL, ids = NULL)
+  col = NULL, ids = NULL, type = "both")
 }
 \arguments{
 \item{bpc}{A bpc object (list of intensity matrixes, rt x mz, including several attributes as attached by \link{getMultipleBPC}).}
@@ -19,6 +19,8 @@ plotBPC(bpc = NULL, mfrow = NULL, skip_plots = NULL, ylim = NULL,
 \item{col}{Specific color vector for masses may be provided.}
 
 \item{ids}{Specific plot ids may be explicitely provided.}
+
+\item{type}{Switch between co-plot of BPC and Spectrum ("both") or BPC alone ("bpc").}
 }
 \value{
 A plot to the graphics device and NULL as invisible.

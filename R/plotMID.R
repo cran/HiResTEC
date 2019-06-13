@@ -11,7 +11,7 @@
 #'@param name Name of metabolite.
 #'@param contr Contrasts. Not yet clear if useful.
 #'@param stackedbars Alternative plotting layout using stacked bar plot.
-#'@param subplot_ylim Calculate ylim individually per subplot if TRUE.
+#'@param subplot_ylim Calculate ylim individually per subplot if 0, show full range in all subplots if 100 and limit to the minimal specified number otherwise.
 #'@param ... Further arguments to 'boxplot'.
 #'
 #'@return
@@ -28,8 +28,8 @@
 #'plotMID(mid=mid, gr=gr, name="Metabolite X")
 #'plotMID(mid=mid, gr=gr, stackedbars=TRUE, las=1, col=2:3, xlab="MID")
 #'
-plotMID <- function(mid=NULL, gr=NULL, name="unknown", contr=NULL, stackedbars=FALSE, subplot_ylim=FALSE, ...) {
-  if (is.null(gr)) gr <- gl(n = 1, length = ncol(mid))
+plotMID <- function(mid=NULL, gr=NULL, name="unknown", contr=NULL, stackedbars=FALSE, subplot_ylim=100, ...) {
+  if (is.null(gr)) gr <- gl(n = 1, k = ncol(mid))
   if (stackedbars) {
     # get group medians
     tmp <- t(apply(mid, 1, function(x) { sapply(split(x, gr), median) }))
@@ -44,7 +44,14 @@ plotMID <- function(mid=NULL, gr=NULL, name="unknown", contr=NULL, stackedbars=F
     par(mar=c(3,4,1,0)+0.5)
     ylim <- range(mid, na.rm=T)
     for (k in 1:length(tmp)) {
-      if (subplot_ylim) ylim <- range(tmp[[k]], na.rm=T)
+      if (subplot_ylim<100) {
+        ylim <- range(tmp[[k]], na.rm=T)
+        while(diff(ylim)<subplot_ylim) {
+          ylim <- round(ylim+c(-1,1))
+          if (ylim[1]<0) ylim[1] <- 0
+          if (ylim[2]>100) ylim[2] <- 100
+        }
+      }
       graphics::boxplot(tmp[[k]], main="", ylab="", ylim=ylim, ...)
       graphics::mtext(text = paste0("M",k-1), side = 3, adj = 1)
       if (k==1) {

@@ -4,7 +4,8 @@
 \alias{CalcMID}
 \title{CalcMID.}
 \usage{
-CalcMID(int = NULL, fml = "", ratio = NULL, nmz = NULL, nbio = NULL)
+CalcMID(int = NULL, fml = "", ratio = NULL, nmz = NULL,
+  nbio = NULL)
 }
 \arguments{
 \item{int}{Vector of measured ion intensities of a fragment.}

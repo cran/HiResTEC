@@ -27,8 +27,6 @@
 #'
 #'@export
 #'
-#'@import xcms
-#'
 #'@importFrom graphics par
 #'@importFrom graphics plot
 #'@importFrom graphics points

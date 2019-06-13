@@ -5,8 +5,8 @@
 \title{DeconvoluteSpectrum.}
 \usage{
 DeconvoluteSpectrum(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL,
-  mz_dev = 0.003, use.mz.adjust = FALSE, ionization = c("APCI", "ESI")[1],
-  smooth = 0)
+  mz_dev = 0.003, use.mz.adjust = FALSE, ionization = c("APCI",
+  "ESI")[1], smooth = 0)
 }
 \arguments{
 \item{dat}{A list of xcmsRaws or an xcmsSet object.}

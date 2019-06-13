@@ -22,8 +22,7 @@ CandidateBoxplot <- function(res=NULL) {
   tp_fac <- as.factor(tp)
 
   # requires sam$pchs and sam$cols
-  if (!(exists("sam") && all(c("pchs","cols") %in% colnames(sam)))) {
-    tmp <- factor(res[["tp"]])
+  if (!exists("sam") | (exists("sam") && nrow(sam)!=length(tp)) | (exists("sam") && !all(c("pchs","cols") %in% colnames(sam)))) {
     sam <- data.frame("cols"=grDevices::rainbow(length(levels(tp_fac)))[as.numeric(tp_fac)], "pchs"=rep(c(21,22,24,25),length.out=length(levels(res[["gr"]])))[as.numeric(res[["gr"]])], stringsAsFactors = FALSE)
   }
 

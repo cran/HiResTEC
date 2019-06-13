@@ -4,8 +4,8 @@
 \alias{ExportHeuristicsTable}
 \title{ExportHeuristicsTable.}
 \usage{
-ExportHeuristicsTable(res_list1 = NULL, res_list2 = NULL, out1 = NULL,
-  out2 = NULL, p_thr = 0.01, xls_name = "Tables.xlsx")
+ExportHeuristicsTable(res_list1 = NULL, res_list2 = NULL,
+  out1 = NULL, out2 = NULL, p_thr = 0.01, xls_name = "Tables.xlsx")
 }
 \arguments{
 \item{res_list1}{res_list1.}

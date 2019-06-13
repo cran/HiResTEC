@@ -4,11 +4,11 @@
 \alias{EvaluateMassTargetedForFlux}
 \title{EvaluateMassTargetedForFlux.}
 \usage{
-EvaluateMassTargetedForFlux(xg = NULL, dat = NULL, tp = NULL, gr = NULL,
-  mz = NULL, rt = NULL, dmz_M0 = 0.01, drt_M0 = 10, dmz = 0.05,
-  drt = 0.5, mz_iso = 1.003355, ng = NULL, mfrow = NULL,
-  pdf_file = "SinglePeak.pdf", xlsx_file = "SinglePeak.xlsx",
-  testing = FALSE)
+EvaluateMassTargetedForFlux(xg = NULL, dat = NULL, tp = NULL,
+  gr = NULL, mz = NULL, rt = NULL, dmz_M0 = 0.01, drt_M0 = 10,
+  dmz = 0.05, drt = 0.5, mz_iso = 1.003355, ng = NULL,
+  mfrow = NULL, pdf_file = "SinglePeak.pdf",
+  xlsx_file = "SinglePeak.xlsx", testing = FALSE)
 }
 \arguments{
 \item{xg}{xcmsSet object with group information.}

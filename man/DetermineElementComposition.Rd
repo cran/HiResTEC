@@ -4,7 +4,8 @@
 \alias{DetermineElementComposition}
 \title{DetermineElementComposition.}
 \usage{
-DetermineElementComposition(int = NULL, mz = 300, ionization = "APCI")
+DetermineElementComposition(int = NULL, mz = 300,
+  ionization = "APCI")
 }
 \arguments{
 \item{int}{Measured intensities.}
