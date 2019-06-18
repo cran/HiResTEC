@@ -48,15 +48,8 @@ If it is set to 'pos' or 'neg', overlapping peaks (determined by experiment wide
 If set to 'all' overlapping peaks will always be removed from the list of mz-pairs to be tested (fast).
 }
 \examples{
-#load initial candidate list based on xcmsSet object, sample table and experimental raw data
-\donttest{
-data(xcms_cand, package="HiResTEC")
-data(sam, package="HiResTEC")
-data(dat, package="HiResTEC")
-res_list <- EvaluateCandidateListAgainstRawData(x=xcms_cand, tp=sam$TP, gr=sam$Group,
-                                               dat=dat, dmz=0.005, drt=0.5)
-# show QC plots of the best candidate
-best <- which(sapply(res_list, function(x) { x$cand_id=="1" }))
-GenerateQCPlots(res_list[best])
-}
+# Please use examples from previous versions as xcms (and xcms objects)
+# are no longer supported during CRAN checks leading to package rejection
+# if included (and I do not know a work around). :(
+
 }

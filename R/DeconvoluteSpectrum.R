@@ -20,10 +20,9 @@
 #'A pseudo spectrum at rt (containing mz1 if specified). Effectively a 2-column matrix (mz, int) with rt as attribute
 #'
 #'@examples
-#'# load data and deconvolute Adenosine 5TMS
-#'data(dat, package="HiResTEC")
-#'s <- DeconvoluteSpectrum(dat=dat, rt=1026.5, rt_dev=3, mz1=556.263, mz_dev=0.025)
-#'InterpretMSSpectrum::PlotSpec(s)
+#'# Please use examples from previous versions as xcms (and xcms objects)
+#'# are no longer supported during CRAN checks leading to package rejection
+#'# if included (and I do not know a work around). :(
 #'
 #'@export
 #'

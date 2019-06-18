@@ -5,7 +5,7 @@
 \alias{xcms_cand}
 \title{Dataframe with putative candidates}
 \description{
-This data frame contains the analysis result of \link{xg} using \link{EvaluatePairsFromXCMSSet} with respect to interesting m/z-pairs.
+This data frame contains the analysis result of an xcmsSet which can not be provided via CRAN anymore using \link{EvaluatePairsFromXCMSSet} with respect to interesting m/z-pairs.
 }
 \author{
 Jan Lisec \email{jan.lisec@bam.de}

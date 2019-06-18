@@ -25,11 +25,9 @@
 #'A dataframe with all observable pairs within the provided xcmsSet peak list including mean group intensities and P values.
 #'
 #'@examples
-#'#load grouped xcmsSet object (with 18 samples from 3 timepoints and 2 groups with 3 replicates each)
-#'\donttest{
-#'data(xg, package="HiResTEC")
-#'data(sam, package="HiResTEC")
-#'xcms_cand <- EvaluatePairsFromXCMSSet(xg=xg, tp=sam$TP, gr=sam$Group, drt=0.5, dmz=0.005)
+#'#Please use examples from previous versions as xcms (and xcms objects) are no longer supported during CRAN checks
+#'#leading to package rejection if included (and I do not know a work around :()
+#'load(xcms_cand)
 #'head(xcms_cand[order(xcms_cand$P),])
 #'}
 #'
@@ -40,7 +38,8 @@
 EvaluatePairsFromXCMSSet <- function(xg=NULL, tp=NULL, gr=NULL, drt=1, dmz=0.025, mz_iso=1.00335, n=6, method=c("APCI","ESI")[1], specific_row=NULL, testing=FALSE, silent=FALSE) {
 
   # check if grouped xcmsSet provided and extract data from object
-  stopifnot(class(xg)=="xcmsSet")
+  # [20190618 JL needed to remove class information regarding xcms objects for CRAN]
+  # stopifnot(class(xg)=="xcmsSet")
 
   # [20190514 JL xcms needs to be put to suggest due to mzR on request by CRAN --> replaced xcms::groupval by quick and dirty own function]
   gv <- groupval(xg=xg)

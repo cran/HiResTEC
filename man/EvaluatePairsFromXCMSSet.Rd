@@ -43,13 +43,3 @@ but reportes an intermediate mass as m/z. In this case you will find carbon isot
 The effect is increased with isotope number, i.e. M+6 will be ~20mDa below the expected value. Hence, selecting method 'APCI' will combine your selected dmz
 with a allowed deviation due to Si-isotope caused mass shifts. Use 'ESI' if you are not sure if this effect takes place in your settings.
 }
-\examples{
-#load grouped xcmsSet object (with 18 samples from 3 timepoints and 2 groups with 3 replicates each)
-\donttest{
-data(xg, package="HiResTEC")
-data(sam, package="HiResTEC")
-xcms_cand <- EvaluatePairsFromXCMSSet(xg=xg, tp=sam$TP, gr=sam$Group, drt=0.5, dmz=0.005)
-head(xcms_cand[order(xcms_cand$P),])
-}
-
-}

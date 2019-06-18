@@ -32,7 +32,6 @@
 #'
 getMultipleBPC <- function(x, mz=NULL, mz_dev=0.005, rt=NULL, rt_dev=2, zeroVal=NA, smooth=0, returnEIC=FALSE) {
   # mz/mz_dev can be vectorized; rt/rt_dev will be consistently used
-  stopifnot(class(x)=="xcmsRaw")
 
   scans <- which(abs(x@scantime-rt) <= rt_dev)
   if(length(scans)<1)

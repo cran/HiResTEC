@@ -1,8 +1,8 @@
 Package: HiResTEC
 Type: Package
 Title: Non-Targeted Fluxomics on High-Resolution Mass-Spectrometry Data
-Version: 0.58
-Date: 2019-06-13
+Version: 0.59
+Date: 2019-06-18
 Authors@R: c(person("Jan", "Lisec", role = c("aut", "cre"), email = "jan.lisec@bam.de"), person("Friederike", "Hoffmann", role = c("aut"), email = "Friederike.Hoffmann@charite.de"))
 Maintainer: Jan Lisec <jan.lisec@bam.de>
 Description: Identifying labeled compounds in a 13C-tracer experiment in non-targeted fashion is a cumbersome process. This package facilitates such type of analyses
@@ -16,11 +16,10 @@ LazyData: TRUE
 Depends: R(>= 2.10.0)
 biocViews:
 Imports: plyr, openxlsx, InterpretMSSpectrum, Rdisop, beeswarm, Biobase
-Suggests: xcms
 RoxygenNote: 6.1.1
 NeedsCompilation: yes
-Packaged: 2019-06-13 12:45:04 UTC; jlisec
+Packaged: 2019-06-18 13:09:36 UTC; jlisec
 Author: Jan Lisec [aut, cre],
   Friederike Hoffmann [aut]
 Repository: CRAN
-Date/Publication: 2019-06-13 15:40:16 UTC
+Date/Publication: 2019-06-18 13:40:03 UTC
