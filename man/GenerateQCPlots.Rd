@@ -4,8 +4,12 @@
 \alias{GenerateQCPlots}
 \title{GenerateQCPlots.}
 \usage{
-GenerateQCPlots(res_list = NULL, pdf_file = NULL, mfrow = NULL,
-  skip_plots = NULL)
+GenerateQCPlots(
+  res_list = NULL,
+  pdf_file = NULL,
+  mfrow = NULL,
+  skip_plots = NULL
+)
 }
 \arguments{
 \item{res_list}{A list of result objects (each testing an individual mz pair).}
@@ -26,9 +30,9 @@ NULL.
 For individual candidates screen output is reasonable, otherwise a target PDF file should be specified.
 }
 \examples{
-#load evaluation result of example data
+# load evaluation result of example data
 data(res_list)
-#generate Figures on screen (use PDF output for mass evaluation)
+# generate Figures on screen (use PDF output for mass evaluation)
 GenerateQCPlots(res_list[1])
 
 }

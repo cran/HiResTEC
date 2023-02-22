@@ -4,8 +4,15 @@
 \alias{plotBPC}
 \title{plotBPC.}
 \usage{
-plotBPC(bpc = NULL, mfrow = NULL, skip_plots = NULL, ylim = NULL,
-  col = NULL, ids = NULL, type = "both")
+plotBPC(
+  bpc = NULL,
+  mfrow = NULL,
+  skip_plots = NULL,
+  ylim = NULL,
+  col = NULL,
+  ids = NULL,
+  type = "both"
+)
 }
 \arguments{
 \item{bpc}{A bpc object (list of intensity matrixes, rt x mz, including several attributes as attached by \link{getMultipleBPC}).}
@@ -32,8 +39,8 @@ A plot to the graphics device and NULL as invisible.
 not yet
 }
 \examples{
-#load example raw data
+# load example raw data
 data(res_list)
-plotBPC(bpc = res_list[[1]][["bpc"]][c(1:2,13:14)])
+plotBPC(bpc = res_list[[1]][["bpc"]][c(1:2, 13:14)])
 
 }

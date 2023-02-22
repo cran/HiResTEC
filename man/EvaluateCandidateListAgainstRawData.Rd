@@ -4,10 +4,20 @@
 \alias{EvaluateCandidateListAgainstRawData}
 \title{EvaluateCandidateListAgainstRawData.}
 \usage{
-EvaluateCandidateListAgainstRawData(x = NULL, tp = NULL, gr = NULL,
-  dat = NULL, dmz = 0.025, drt = 1, dEcut = 1, Pcut = 0.01,
-  Icut = 1000, method = c("APCI", "ESI")[1], rolp = c("non", "pos",
-  "neg", "all")[2], smooth = 0)
+EvaluateCandidateListAgainstRawData(
+  x = NULL,
+  tp = NULL,
+  gr = NULL,
+  dat = NULL,
+  dmz = 0.025,
+  drt = 1,
+  dEcut = 1,
+  Pcut = 0.01,
+  Icut = 1000,
+  method = c("APCI", "ESI")[1],
+  rolp = c("non", "pos", "neg", "all")[2],
+  smooth = 0
+)
 }
 \arguments{
 \item{x}{Dataframe of results (output of EvaluatePairsFromXCMSet).}

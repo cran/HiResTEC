@@ -4,8 +4,16 @@
 \alias{getMultipleBPC}
 \title{getMultipleBPC.}
 \usage{
-getMultipleBPC(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2,
-  zeroVal = NA, smooth = 0, returnEIC = FALSE)
+getMultipleBPC(
+  x,
+  mz = NULL,
+  mz_dev = 0.005,
+  rt = NULL,
+  rt_dev = 2,
+  zeroVal = NA,
+  smooth = 0,
+  returnEIC = FALSE
+)
 }
 \arguments{
 \item{x}{xcmsRaw object.}
@@ -25,18 +33,22 @@ getMultipleBPC(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2,
 \item{returnEIC}{Return EIC instead of BPC?}
 }
 \value{
-A matrix with scan wise (rows) intensities for all requested masses (columns) as either EIC or BPC.
+A matrix with scan wise (rows) intensities for all requested masses (columns)
+    as either EIC or BPC.
 }
 \description{
-\code{getMultipleBPC} will extract multiple BPCs from an xcmsRaw object for a vector of mz within the limits given by rt, rt_dev and mz_dev.
+\code{getMultipleBPC} will extract multiple BPCs from an xcmsRaw
+    object for a vector of mz within the limits given by rt, rt_dev and mz_dev.
 }
 \details{
-While there are other functions to extract BPC information from raw data, this one is particularly useful to get all traces belonging to a isotopologue group.
-It will attach several derived values to the results object, i.e. describing the observed mass shift (deviation from expected value) which is helpful in QC for non-targeted tracer analyses.
+While there are other functions to extract BPC information from raw data,
+    this one is particularly useful to get all traces belonging to a isotopologue
+    group. It will attach several derived values to the results object,
+    i.e. describing the observed mass shift (deviation from expected value) which
+    is helpful in QC for non-targeted tracer analyses.
 }
 \examples{
-# see \\link{plotMID} for an example
-
+# see \link{plotMID} for an example
 }
 \references{
 Uses C code modified from XCMS (see \code{citation("xcms")}).

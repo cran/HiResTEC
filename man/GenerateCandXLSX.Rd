@@ -23,10 +23,10 @@ Candidate table as data.frame.
 Not yet.
 }
 \examples{
-#load evaluation result of example data
+# load evaluation result of example data
 data(res_list)
-#generate table within R (use xlsx_file to write to file)
+# generate table within R (use xlsx_file to write to file)
 str(GenerateCandXLSX(res_list))
-GenerateCandXLSX(res_list)[,1:5]
+GenerateCandXLSX(res_list)[, 1:5]
 
 }

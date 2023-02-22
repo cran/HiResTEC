@@ -4,9 +4,19 @@
 \alias{EvaluatePairsFromXCMSSet}
 \title{EvaluatePairsFromXCMSSet.}
 \usage{
-EvaluatePairsFromXCMSSet(xg = NULL, tp = NULL, gr = NULL, drt = 1,
-  dmz = 0.025, mz_iso = 1.00335, n = 6, method = c("APCI",
-  "ESI")[1], specific_row = NULL, testing = FALSE, silent = FALSE)
+EvaluatePairsFromXCMSSet(
+  xg = NULL,
+  tp = NULL,
+  gr = NULL,
+  drt = 1,
+  dmz = 0.025,
+  mz_iso = 1.00335,
+  n = 6,
+  method = c("APCI", "ESI")[1],
+  specific_row = NULL,
+  testing = FALSE,
+  silent = FALSE
+)
 }
 \arguments{
 \item{xg}{xcmsSet object with group information.}
@@ -42,4 +52,14 @@ Using 'APCI' as method assumes that (i) you analyze TMS-derivatized compounds an
 but reportes an intermediate mass as m/z. In this case you will find carbon isotopes below there expected masses, i.e. M+1 would be 1.001mDa apart from M+0 instead of 1.003.
 The effect is increased with isotope number, i.e. M+6 will be ~20mDa below the expected value. Hence, selecting method 'APCI' will combine your selected dmz
 with a allowed deviation due to Si-isotope caused mass shifts. Use 'ESI' if you are not sure if this effect takes place in your settings.
+}
+\examples{
+# Please use examples from previous versions as xcms (and xcms objects) are
+# no longer supported during CRAN checks leading to package rejection
+# if included (and I do not know a work around).
+\dontrun{
+load(xcms_cand)
+head(xcms_cand[order(xcms_cand$P), ])
+}
+
 }
