@@ -26,8 +26,7 @@
 #' @return
 #' A list of evaluation results.
 #'
-#' @importFrom utils setTxtProgressBar
-#' @importFrom utils txtProgressBar
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #'
 #' @examples
 #' # Please use examples from previous versions as xcms (and xcms objects)
@@ -91,7 +90,7 @@ EvaluateCandidateListAgainstRawData <- function(x = NULL, tp = NULL, gr = NULL, 
       # don't do anything if already marked due to Spectra occurence
     } else {
       # evaluate candidate without spectrum deconvolution
-      # browser()
+      browser()
       dmz_mat <- matrix(c(dmz + mz_shift_corrector[1:(x[i, "n"] + 1)], rep(dmz, x[i, "n"] + 1)), ncol = 2)
       res <- EvaluateCandidate(x = x[i, , drop = FALSE], tp = tp, gr = gr, dmz = dmz_mat, drt = drt, dat = dat, dEcut = dEcut, Pcut = Pcut, Icut = Icut, method = method, flux_lib = flux_lib, flux_lib_masses = flux_lib_masses)
       res <- EvaluateSpectrum(res = res, dat = dat, drt = drt, dmz = dmz, ionization = ifelse(method %in% c("APCI", "test"), "APCI", "ESI"), smooth = smooth)

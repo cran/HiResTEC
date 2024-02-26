@@ -1,13 +1,13 @@
 #' @title plotMID.
 #'
 #' @description
-#' \code{plotMID} will plot a Mass Isotopomer Distribution (MID) as calculated by CorMID.
+#' \code{plotMID} will plot a Mass Isotopomer Distribution (MID).
 #'
 #' @details
 #' Not yet.
 #'
-#' @param mid Matrix of measured ion intensities corrected using CorMID.
-#' @param gr Groups, a factor.
+#' @param mid Matrix of corrected mass isotopomer distributions. Samples in columns, MID values in rows.
+#' @param gr Groups, a factor vector of length ncol(mid).
 #' @param name Name of metabolite.
 #' @param contr Contrasts. Not yet clear if useful.
 #' @param stackedbars Alternative plotting layout using stacked bar plot.
@@ -15,7 +15,7 @@
 #' @param ... Further arguments to 'boxplot' or 'barplot' (depending on 'stackedbars').
 #'
 #' @return
-#' NULL.
+#' A plot.
 #'
 #' @importFrom graphics barplot
 #' @importFrom grDevices grey
@@ -27,13 +27,14 @@
 #' gr <- gl(2, 2, labels = letters[1:2])
 #' plotMID(mid = mid, gr = gr, name = "Metabolite X")
 #' plotMID(mid = mid, gr = gr, stackedbars = TRUE, las = 1, xlab = "MID", legend.text = c("x", "y"))
-#' rownames(mid) <- paste0("M", 0:1)
 #' lt <- paste0("M", 0:1)
+#' rownames(mid) <- lt
 #' plotMID(mid = mid, gr = gr, stackedbars = TRUE, las = 1, xlab = "MID", legend.text = lt)
 #' plotMID(mid = mid[, 2, drop = FALSE], stackedbars = TRUE, col = c(3, 4))
 #' colnames(mid) <- paste0("S", 1:4)
 #' gr2 <- gl(n = 1, k = 1, labels = "bla")
 #' plotMID(mid = mid[, 2, drop = FALSE], gr = gr2, stackedbars = TRUE, name = NULL)
+#' plotMID(mid = mid, gr = factor(colnames(mid)), stackedbars = TRUE, name = NULL)
 plotMID <- function(mid = NULL, gr = NULL, name = "unknown", contr = NULL, stackedbars = FALSE, subplot_ylim = 100, ...) {
   stopifnot(is.matrix(mid) && is.numeric(mid) && nrow(mid) >= 2 && ncol(mid) >= 1)
   argg <- c(as.list(environment()), list(...))
@@ -41,8 +42,8 @@ plotMID <- function(mid = NULL, gr = NULL, name = "unknown", contr = NULL, stack
   if (is.null(gr)) gr <- gl(n = 1, k = ncol(mid), labels = "")
   if (stackedbars) {
     # get group medians
-    tmp <- plyr::adply(mid, 1, function(x) {
-      sapply(split(x, gr), median)
+    tmp <- plyr::adply(unname(mid), 1, function(x) {
+      sapply(split(x, gr), median, na.rm=TRUE)
     }, .id = NULL)
     rownames(tmp) <- rownames(mid)
     colnames(tmp) <- levels(gr)
@@ -87,10 +88,22 @@ plotMID <- function(mid = NULL, gr = NULL, name = "unknown", contr = NULL, stack
     if ("las" %in% names(argg)) {
       las <- argg$las
     }
+    horiz <- TRUE
+    if ("horiz" %in% names(argg)) {
+      horiz <- argg$horiz
+    }
+    axes <- TRUE
+    if ("axes" %in% names(argg)) {
+      axes <- argg$axes
+    }
     mar_b <- ifelse(nchar(xlab) >= 1, 5, 3)
     mar_l <- ifelse(nchar(ylab) >= 1, 4, 2)
-    par(mar = c(mar_b, mar_l, 1, 0) + 0.5)
-    graphics::barplot(tmp, ylab = ylab, col = col, xlab = xlab, legend.text = legend.text, las = las, args.legend = args.legend)
+    if ("mar" %in% names(argg)) {
+      par(mar = argg$mar)
+    } else {
+      par(mar = c(mar_b, mar_l, 1, 0) + 0.5)
+    }
+    graphics::barplot(tmp, ylab = ylab, col = col, xlab = xlab, legend.text = legend.text, las = las, args.legend = args.legend, axes = axes, horiz = horiz)
     par(mar = opar$mar)
   } else {
     tmp <- apply(mid, 1, function(x) {

@@ -13,6 +13,7 @@
 #' @param col Specific color vector for masses may be provided.
 #' @param ids Specific plot ids may be explicitely provided.
 #' @param type Switch between co-plot of BPC and Spectrum ("both") or BPC alone ("bpc").
+#' @param ann Select value to annotate peaks in spectrum. Usually the mass deviation from the expected value in mDa.
 #'
 #' @return
 #' A plot to the graphics device and NULL as invisible.
@@ -21,6 +22,7 @@
 #' # load example raw data
 #' data(res_list)
 #' plotBPC(bpc = res_list[[1]][["bpc"]][c(1:2, 13:14)])
+#' plotBPC(bpc = res_list[[1]][["bpc"]][c(1:2, 13:14)], ann="mz")
 #'
 #' @export
 #'
@@ -33,9 +35,11 @@
 #' @importFrom grDevices grey
 #' @importFrom graphics box
 
-plotBPC <- function(bpc = NULL, mfrow = NULL, skip_plots = NULL, ylim = NULL, col = NULL, ids = NULL, type = "both") {
+plotBPC <- function(bpc = NULL, mfrow = NULL, skip_plots = NULL, ylim = NULL, col = NULL, ids = NULL, type = "both", ann = c("mdev", "mz", "none")) {
   opar <- par(no.readonly = TRUE)
   on.exit(par(opar))
+
+  ann <- match.arg(ann)
 
   # number of valid samples
   n <- ifelse(is.list(bpc), length(bpc), 1)
@@ -122,6 +126,8 @@ plotBPC <- function(bpc = NULL, mfrow = NULL, skip_plots = NULL, ylim = NULL, co
           box()
           # annotate with mass defect
           md <- attr(bpc[[j]], "mass_defect")
+          if (ann=="mz") { md <- as.numeric(colnames(bpc[[j]])) }
+          if (ann=="none") { md <- NULL }
           for (k in which(is.finite(md))) text(y = spec[k], x = mz[k], labels = md[k], adj = c(ifelse(spec[k] > 0.8, 1, 0), 1.25), srt = 90, col = grDevices::grey(0.4), cex = 1)
         }
       }

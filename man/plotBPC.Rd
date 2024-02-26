@@ -11,7 +11,8 @@ plotBPC(
   ylim = NULL,
   col = NULL,
   ids = NULL,
-  type = "both"
+  type = "both",
+  ann = c("mdev", "mz", "none")
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plotBPC(
 \item{ids}{Specific plot ids may be explicitely provided.}
 
 \item{type}{Switch between co-plot of BPC and Spectrum ("both") or BPC alone ("bpc").}
+
+\item{ann}{Select value to annotate peaks in spectrum. Usually the mass deviation from the expected value in mDa.}
 }
 \value{
 A plot to the graphics device and NULL as invisible.
@@ -42,5 +45,6 @@ not yet
 # load example raw data
 data(res_list)
 plotBPC(bpc = res_list[[1]][["bpc"]][c(1:2, 13:14)])
+plotBPC(bpc = res_list[[1]][["bpc"]][c(1:2, 13:14)], ann="mz")
 
 }

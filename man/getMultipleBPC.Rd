@@ -18,11 +18,11 @@ getMultipleBPC(
 \arguments{
 \item{x}{xcmsRaw object.}
 
-\item{mz}{mass vector.}
+\item{mz}{mass vector or NULL (default) to return the TIC.}
 
 \item{mz_dev}{allowed deviations (can be a single numeric, a vector, a matrix with one row (lower bound, upper bound) or a matrix with \code{length(mz)} rows giving lower and upper bound for each mz).}
 
-\item{rt}{target timepoint.}
+\item{rt}{target time point or NULL (default) to use full scan time.}
 
 \item{rt_dev}{allowed window.}
 
@@ -48,7 +48,7 @@ While there are other functions to extract BPC information from raw data,
     is helpful in QC for non-targeted tracer analyses.
 }
 \examples{
-# see \link{plotMID} for an example
+# see \link{plotBPC} for an example
 }
 \references{
 Uses C code modified from XCMS (see \code{citation("xcms")}).

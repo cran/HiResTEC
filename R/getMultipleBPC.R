@@ -7,9 +7,9 @@
 #'     i.e. describing the observed mass shift (deviation from expected value) which
 #'     is helpful in QC for non-targeted tracer analyses.
 #' @param x xcmsRaw object.
-#' @param mz mass vector.
+#' @param mz mass vector or NULL (default) to return the TIC.
 #' @param mz_dev allowed deviations (can be a single numeric, a vector, a matrix with one row (lower bound, upper bound) or a matrix with \code{length(mz)} rows giving lower and upper bound for each mz).
-#' @param rt target timepoint.
+#' @param rt target time point or NULL (default) to use full scan time.
 #' @param rt_dev allowed window.
 #' @param zeroVal Set values <=0 to NA or keep as is with NULL.
 #' @param smooth Window size for moving average smoother, 0 = no smoothing.
@@ -18,12 +18,18 @@
 #' @return A matrix with scan wise (rows) intensities for all requested masses (columns)
 #'     as either EIC or BPC.
 #' @examples
-#' # see \link{plotMID} for an example
+#' # see \link{plotBPC} for an example
 #' @export
 #' @useDynLib HiResTEC, .registration = TRUE
 #' @references Uses C code modified from XCMS (see \code{citation("xcms")}).
 getMultipleBPC <- function(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2, zeroVal = NA, smooth = 0, returnEIC = FALSE) {
   # mz/mz_dev can be vectorized; rt/rt_dev will be consistently used
+
+  # use full rt if rt = NULL
+  if (is.null(rt)) {
+    rt <- median(range(x@scantime))
+    rt_dev <- diff(range(x@scantime))/2
+  }
 
   scans <- which(abs(x@scantime - rt) <= rt_dev)
   if (length(scans) < 1) {
@@ -41,8 +47,17 @@ getMultipleBPC <- function(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2, 
     x@scanindex <- as.integer(x@scanindex)
   }
 
+  # return TIC for mz = NULL
+  if (is.null(mz)) {
+    mz <- median(scanrange)
+    mz_dev <- median(scanrange)
+  } else {
+    # convert to vector in case user provided a data.frame
+    mz <- as.vector(unlist(mz))
+    mz <- as.numeric(mz)
+  }
+
   ## prepare mz_dev
-  # browser()
   nmz <- length(mz)
   nmzdev <- length(mz_dev)
   isNumeric <- is.numeric(mz_dev)
