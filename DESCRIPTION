@@ -1,8 +1,8 @@
 Type: Package
 Package: HiResTEC
 Title: Non-Targeted Fluxomics on High-Resolution Mass-Spectrometry Data
-Version: 0.62.3
-Date: 2024-02-23
+Version: 0.63.1
+Date: 2025-02-21
 Authors@R: c(
     person("Jan", "Lisec", , "jan.lisec@bam.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-1220-2286")),
@@ -20,17 +20,21 @@ Description: Identifying labeled compounds in a 13C-tracer experiment in
     The functionality is described in Hoffmann et al. (2018)
     <doi:10.1021/acs.analchem.8b00356>.
 License: GPL-3
-URL: https://github.com/janlisec/HiResTEC
-Depends: R (>= 2.10.0)
-Imports: beeswarm, CorMID, InterpretMSSpectrum, openxlsx, plyr
+URL: https://github.com/janlisec/HiResTEC,
+        https://janlisec.github.io/HiResTEC/
+Depends: R (>= 3.5)
+Imports: CorrectOverloadedPeaks (>= 1.3.5), plyr
 biocViews:
 Encoding: UTF-8
 Language: en-US
 LazyData: TRUE
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
+Suggests: beeswarm, CorMID, InterpretMSSpectrum, knitr, openxlsx,
+        rmarkdown
+VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2024-02-26 08:58:35 UTC; jlisec
+Packaged: 2025-02-27 09:36:55 UTC; jlisec
 Author: Jan Lisec [aut, cre] (<https://orcid.org/0000-0003-1220-2286>),
   Friederike Hoffmann [aut]
 Repository: CRAN
-Date/Publication: 2024-02-26 09:20:09 UTC
+Date/Publication: 2025-02-27 09:50:05 UTC

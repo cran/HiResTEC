@@ -1,39 +1,36 @@
-#' @title DeconvoluteSpectrum.
+#' @title Deconvolute a Mass Spectrum from a list of raw data files.
 #'
-#' @description
-#' \code{DeconvoluteSpectrum} will evaluate a list of xcmsRaw objects at a given time (rt) and potential mass (mz1).
-#' The main purpose is to deconvolute the mass spectrum at rt including mz1.
+#' @description \code{DeconvoluteSpectrum} will evaluate a list of `xcmsRaw` or
+#'     `xcmsRawLike` objects at a given time (rt) and potential mass (mz1). The
+#'     main purpose is to deconvolute the mass spectrum at rt including mz1.
 #'
-#' @details
-#' Will test all mz at spectrum of base peak within range for co-apex, rt diff and ratio consistency/correlation over a set of samples.
+#' @details The specific advantage of \code{DeconvoluteSpectrum} is, that it does
+#'     not deconvolute signals within a single measurement file but uses correlation
+#'     tests over a set of measurements to improve statistical power. It will test
+#'     all mz around a specified rt to co-apex with some mz1, have a low rt
+#'     difference and consistent intensity ratio over all samples.
 #'
-#' @param dat A list of xcmsRaws or an xcmsSet object.
-#' @param rt Retention time to search for maxima.
-#' @param rt_dev Allowed retention time window.
-#' @param mz1 If specified, ensure that this mass is included in the spectrum (assumed base peak). NULL otherwise.
+#' @param dat A list of `xcmsRaw` or `xcmsRawLike` objects.
+#' @param rt Retention time of the expected peak.
+#' @param rt_dev Allowed retention time deviation.
+#' @param mz1 If specified, ensure that this mass is included in the spectrum (assumed base peak). Can be NULL otherwise in which case the most intense peak at rt will be selected as mz1.
 #' @param mz_dev Allowed mz deviation [Da].
 #' @param use.mz.adjust Will adjust mz on an experiment wide basis.
 #' @param ionization Either APCI or ESI. Choice will modify some internal parameters and checks performed.
 #' @param smooth Smoothing parameter passed on to \link{getMultipleBPC}.
 #'
-#' @return
-#' A pseudo spectrum at rt (containing mz1 if specified). Effectively a 2-column matrix (mz, int) with rt as attribute
+#' @return A pseudo spectrum at rt (containing mz1 if specified). Effectively
+#'     a 2-column matrix (mz, int) with rt as attribute.
 #'
 #' @examples
-#' # Please use examples from previous versions as xcms (and xcms objects)
-#' # are no longer supported during CRAN checks leading to package rejection
-#' # if included (and I do not know a work around). :(
+#' # The example measurement data provided with HiResTEC contain a peak at 1026s
+#' raw <- HiResTEC::raw
+#' HiResTEC::DeconvoluteSpectrum(raw, rt = 1026)
 #'
 #' @export
 #'
-#' @importFrom graphics par
-#' @importFrom graphics plot
-#' @importFrom graphics points
-#' @importFrom graphics legend
-#' @importFrom stats median
-#' @importFrom stats cor
-#' @importFrom stats sd
-#'
+#' @importFrom graphics par plot points legend
+#' @importFrom stats median cor sd
 
 DeconvoluteSpectrum <- function(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL, mz_dev = 0.003, use.mz.adjust = FALSE, ionization = c("APCI", "ESI")[1], smooth = 0) {
   # putative parameters
@@ -56,7 +53,7 @@ DeconvoluteSpectrum <- function(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL, m
     nmax <- 1000
   }
 
-  GetSpectrum <- function(x = NULL, rt = NULL, cutoff = 200, nmax = 150, se = 2) {
+  GetSpectrum <- function(x = NULL, rt = NULL, cutoff = 200, nmax = 150, se = 2, sort_int = FALSE) {
     # this is the scan where target mz1 is at max within all samples
     s <- which.min(abs(x@scantime - rt))
     if (s == length(x@scanindex)) s <- s - se
@@ -85,7 +82,18 @@ DeconvoluteSpectrum <- function(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL, m
     i <- i[flt]
     m <- m[flt]
     # return mz which fulfill above criteria
-    return(m)
+    if (sort_int) {
+      return(m[order(i, decreasing = TRUE)])
+    } else {
+      return(m)
+    }
+  }
+
+  if (is.null(mz1)) {
+    # take the median of highest masses found in all provided samples
+    mz1 <- median(sapply(dat, function(x) {
+      GetSpectrum(x = x, rt = rt, sort_int = TRUE)[1]
+    }))
   }
 
   # determine rt and int of max mz over exp
@@ -116,7 +124,8 @@ DeconvoluteSpectrum <- function(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL, m
 
   # readjust rt and rt_dev based on data
   if (!is.finite(median(as.numeric(names(i_mz1))[i_mz1 > 0], na.rm = T))) {
-    browser()
+    #browser()
+    message("ToDo: The rt should be adjusted.")
   } else {
     rt <- median(as.numeric(names(i_mz1))[i_mz1 > 0], na.rm = T)
   }
@@ -197,9 +206,11 @@ DeconvoluteSpectrum <- function(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL, m
         matrix(0, nrow = ncol(out[[i]]), ncol = 1)
       }
     }), 1, median, na.rm = T), 2)
+    msg_warn <- NULL
   } else {
     # set cor_rat=1 artificially
     cor_rat <- rep(1, length(d_rt))
+    msg_warn <- "Less than 5 samples provided, no correlation testing was performed."
   }
 
   mz_rat <- round(apply(sapply(1:length(out), function(i) {
@@ -227,6 +238,6 @@ DeconvoluteSpectrum <- function(dat = NULL, rt = NULL, rt_dev = 3, mz1 = NULL, m
   }
 
   attr(spec, "rt") <- rt
-  attr(spec, "warning") <- "Less than 5 samples provided, no correlation testing was performed."
+  if (!is.null(msg_warn)) attr(spec, "warning") <- msg_warn
   return(spec)
 }

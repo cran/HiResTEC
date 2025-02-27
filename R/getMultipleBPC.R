@@ -1,29 +1,45 @@
-#' @title getMultipleBPC.
-#' @description \code{getMultipleBPC} will extract multiple BPCs from an xcmsRaw
-#'     object for a vector of mz within the limits given by rt, rt_dev and mz_dev.
+#' @title Extract multiple ion chromatograms from mass spectrometry data.
+#'
+#' @description \code{getMultipleBPC} will extract multiple BPCs from an `xcmsRaw`
+#'     or `xcmsRawLike` object for a vector of mz within the limits given by rt,
+#'     rt_dev and mz_dev.
+#'
 #' @details While there are other functions to extract BPC information from raw data,
 #'     this one is particularly useful to get all traces belonging to a isotopologue
 #'     group. It will attach several derived values to the results object,
 #'     i.e. describing the observed mass shift (deviation from expected value) which
 #'     is helpful in QC for non-targeted tracer analyses.
-#' @param x xcmsRaw object.
-#' @param mz mass vector or NULL (default) to return the TIC.
-#' @param mz_dev allowed deviations (can be a single numeric, a vector, a matrix with one row (lower bound, upper bound) or a matrix with \code{length(mz)} rows giving lower and upper bound for each mz).
-#' @param rt target time point or NULL (default) to use full scan time.
-#' @param rt_dev allowed window.
+#'     While the `mz` and `mz_dev` parameters  can be vectorized, the `rt` and
+#'     `rt_dev` values will be consistently used for all ion traces.
+#'
+#' @param x `xcmsRaw` or `xcmsRawLike` object.
+#' @param mz Numeric vector of masses or NULL (default) to return the overall BPC.
+#' @param mz_dev Allowed mass deviations (can be a single numeric, a vector, a matrix
+#'     with one row (lower bound, upper bound) or a matrix with \code{length(mz)} rows
+#'     giving lower and upper bound for each mz).
+#' @param rt Target retention time or NULL (default) to use full time range.
+#' @param rt_dev Allowed time deviation (if rt is specified).
 #' @param zeroVal Set values <=0 to NA or keep as is with NULL.
 #' @param smooth Window size for moving average smoother, 0 = no smoothing.
 #' @param returnEIC Return EIC instead of BPC?
 #'
 #' @return A matrix with scan wise (rows) intensities for all requested masses (columns)
 #'     as either EIC or BPC.
+#'
 #' @examples
-#' # see \link{plotBPC} for an example
+#' raw <- HiResTEC::raw
+#' # search for mz = 556.263 and its isotopic traces
+#' mz <- 556.263 + c(0:3) * 1.0034
+#' getMultipleBPC(x = raw[[1]], mz = mz, mz_dev = 0.04, rt = 1026)
+#'
 #' @export
+#'
 #' @useDynLib HiResTEC, .registration = TRUE
+#'
 #' @references Uses C code modified from XCMS (see \code{citation("xcms")}).
+#'
 getMultipleBPC <- function(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2, zeroVal = NA, smooth = 0, returnEIC = FALSE) {
-  # mz/mz_dev can be vectorized; rt/rt_dev will be consistently used
+  #
 
   # use full rt if rt = NULL
   if (is.null(rt)) {
@@ -49,8 +65,8 @@ getMultipleBPC <- function(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2, 
 
   # return TIC for mz = NULL
   if (is.null(mz)) {
-    mz <- median(scanrange)
-    mz_dev <- median(scanrange)
+    mz <- median(x@mzrange)
+    mz_dev <- diff(range(x@mzrange))/2
   } else {
     # convert to vector in case user provided a data.frame
     mz <- as.vector(unlist(mz))
@@ -91,13 +107,10 @@ getMultipleBPC <- function(x, mz = NULL, mz_dev = 0.005, rt = NULL, rt_dev = 2, 
   ln <- which.max(apply(res, 1, sum, na.rm = T)) # scan whose TIC is max
   attr(res, "maxBPC") <- ln
   ln <- max(c(1, ln - 2)):min(c(length(scans), ln + 2)) # expand max scan to left and right (5 scans total)
-  # cl <- grep("m",colnames(tmp))
   mzmat <- matrix(tmp$mz, nrow = length(scans), ncol = length(mz), byrow = TRUE)[ln, ] # matrix of accurate mz values [5 x nmz]
   mzmat[mzmat == 0] <- NA
   mzmat <- t(mzmat) - mz # [nmz x 5]
-  #mzmat <- round(1000 * Biobase::rowMedians(mzmat, na.rm = TRUE)) # slightly faster, we need Biobase anyway due to xcms
   mzmat <- round(1000 * apply(mzmat, MARGIN=1, FUN=median, na.rm=TRUE))
-  # mzmat <- round(1000*apply(mzmat, 1, median, na.rm=TRUE),1) # vector of length nmz
   mzmat[!is.finite(mzmat)] <- NA
   if (length(mzmat) < length(mz)) mzmat <- rep(NA, length(mz))
   attr(res, "mass_defect") <- mzmat
